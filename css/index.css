@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --mark-size: 150px;
+}
+
+body {
+  margin: 0;
+}
+
+.board {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: repeat(3, auto);
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--mark-size);
+  height: var(--mark-size);
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.board .x,
+.board .o {
+  cursor: not-allowed;
+}
+
+.board .x:hover,
+.board .o:hover {
+  background-color: #ff3a3a;
+}
+
+.cell:first-child,
+.cell:nth-of-type(2),
+.cell:nth-of-type(3) {
+  border-top: none;
+}
+
+.cell:last-child,
+.cell:nth-of-type(7),
+.cell:nth-of-type(8) {
+  border-bottom: none;
+}
+
+.cell:nth-of-type(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-of-type(3n + 3) {
+  border-right: none;
+}
+
+.board .x::before,
+.board .x::after {
+  content: '';
+  height: calc(var(--mark-size) * 0.8);
+  width: calc(var(--mark-size) * 0.2);
+  background-color: black;
+  position: absolute;
+}
+
+.board .x::before {
+  transform: rotate(45deg);
+}
+
+.board .x::after {
+  transform: rotate(-45deg);
+}
+
+.board .o::before,
+.board .o::after {
+  content: '';
+  height: calc(var(--mark-size) * 0.8);
+  width: calc(var(--mark-size) * 0.8);
+  border-radius: 50%;
+  background-color: black;
+  position: absolute;
+}
+
+.board .o::after {
+  height: calc(var(--mark-size) * 0.5);
+  width: calc(var(--mark-size) * 0.5);
+  background-color: #fff;
+}
