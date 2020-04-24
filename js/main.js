@@ -1,25 +1,72 @@
-var gameboard = (function() {
+const Player = (name, mark) => {
+  const getName = () => name;
+  const getMark = () => mark;
+
+  return { getName, getMark };
+};
+
+const playerOne = Player('jeff', 'x');
+const playerTwo = Player('jeff', 'o');
+
+const gameboard = (() => {
   'use strict';
-  const board = () => [ "","","","","","","","",""];
-  return{
-    board
+
+  const board = ['', '', '', '', '', '', '', '', ''];
+
+  const getBoard = () => board;
+  const cells = document.querySelectorAll('[data-index]');
+
+  let currentPlayer = playerOne.getMark();
+
+  function changePlayer() {
+    if (currentPlayer === 'x') currentPlayer = 'o';
+    else currentPlayer = 'x';
+  }
+
+  const addMark = (e) => {
+    let index = e.target.getAttribute('data-index');
+    e.target.classList.add(currentPlayer);
+    board[index] = currentPlayer;
+    let gameState = gameController.checkGame(currentPlayer);
+    if (gameState === true) {
+      console.log(`The winner is ${currentPlayer}`);
+    }
+    changePlayer();
   };
 
+  [...cells].forEach((cell) => {
+    cell.addEventListener('click', addMark, { once: true });
+  });
+
+  return { getBoard };
 })();
 
-const Player = (name, mark) => {
+const gameController = (() => {
+  'use strict';
 
-  const getName  = () => name;
-  const getMark  = () => mark;
+  const winningPosition = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
 
-  return {getName, getMark};
+  const checkGame = (currentPlayer) => {
+    let currentBoard = gameboard.getBoard();
 
-}
+    return winningPosition.some((arr) => {
+      return arr.every((item) => {
+        return currentBoard[item] === currentPlayer;
+      });
+    });
+  };
 
-const playerOne = Player('jim', "O");
-const playerTwo = Player('jeff', "X");
+  const checkBoard = () => {};
+  const resetBoard = () => {};
 
-// console.log(playerOne.getName());
-// console.log(playerOne.getMark());
-// console.log(playerTwo.getName());
-// console.log(playerTwo.getMark());
+  return { checkGame, checkBoard, resetBoard };
+})();
