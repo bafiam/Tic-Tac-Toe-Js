@@ -6,7 +6,7 @@ const Player = (name, mark) => {
 };
 
 const playerOne = Player('jeff', 'x');
-const playerTwo = Player('stephen', 'o');
+const playerTwo = Player('stephen', 'o')
 
 const gameboard = (() => {
   'use strict';
@@ -22,6 +22,8 @@ const gameboard = (() => {
   let boardreply = document.querySelector('.message')
 
   const cells = document.querySelectorAll('[data-index]');
+
+  
 
 
   let currentPlayer = playerOne.getMark();
@@ -86,7 +88,7 @@ const gameboard = (() => {
   
 
 
-  return { getBoard, callFunc };
+  return { getBoard, setBoard, resetClick};
 })();
 
 const gameController = (() => {
@@ -129,5 +131,13 @@ const gameController = (() => {
 
   };
 
-  return { checkGame, checkBoard, resetBoard };
+
+  const startGame = () => {
+    resetBoard();
+    gameboard.setBoard();
+    gameboard.resetClick();
+
+  };
+
+  return { checkGame, checkBoard, resetBoard, startGame };
 })();
