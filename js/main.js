@@ -6,7 +6,7 @@ const Player = (name, mark) => {
 };
 
 const playerOne = Player('jeff', 'x');
-const playerTwo = Player('jeff', 'o');
+const playerTwo = Player('stephen', 'o');
 
 const gameboard = (() => {
   'use strict';
@@ -19,14 +19,29 @@ const gameboard = (() => {
     return board;
   }
 
+  let boardreply = document.querySelector('.message')
+
   const cells = document.querySelectorAll('[data-index]');
 
+
   let currentPlayer = playerOne.getMark();
+
   
 
   function changePlayer() {
-    if (currentPlayer === 'x') currentPlayer = 'o';
+    if (currentPlayer === 'x') currentPlayer = playerTwo.getMark();
     else currentPlayer = 'x';
+  }
+
+  function playerName(mark) {
+    if (mark === 'x') {
+      return playerOne.getName();
+      
+    } else {
+      return playerTwo.getName();
+      
+    }
+    
   }
 
   const addMark = (e) => {
@@ -35,7 +50,7 @@ const gameboard = (() => {
     board[index] = currentPlayer;
     let gameState = gameController.checkGame(currentPlayer);
     if (gameState === true) {
-      console.log(`The winner is ${currentPlayer}`);
+      boardreply.innerHTML = `The winner is ${playerName(currentPlayer)}`
       gameController.resetBoard();
       setBoard();
       resetClick(cells);
