@@ -11,12 +11,18 @@ const playerTwo = Player('jeff', 'o');
 const gameboard = (() => {
   'use strict';
 
-  const board = ['', '', '', '', '', '', '', '', ''];
+  let board = ['', '', '', '', '', '', '', '', ''];
 
   const getBoard = () => board;
+  const setBoard = () => {
+    board = ['', '', '', '', '', '', '', '', ''];
+    return board;
+  }
+
   const cells = document.querySelectorAll('[data-index]');
 
   let currentPlayer = playerOne.getMark();
+  
 
   function changePlayer() {
     if (currentPlayer === 'x') currentPlayer = 'o';
@@ -30,15 +36,42 @@ const gameboard = (() => {
     let gameState = gameController.checkGame(currentPlayer);
     if (gameState === true) {
       console.log(`The winner is ${currentPlayer}`);
+      gameController.resetBoard();
+      setBoard();
+      resetClick(cells);
+    }else{
+      let boardFull = gameController.checkBoard()
+      if (!boardFull) {
+        console.log(`Game end, draw!!`);
+       
+        gameController.resetBoard();
+        setBoard();
+        resetClick(cells);
+      }
+
     }
     changePlayer();
   };
-
-  [...cells].forEach((cell) => {
+  
+  
+  function callFunc(cells){ 
+    [...cells].forEach((cell) => {
     cell.addEventListener('click', addMark, { once: true });
-  });
+  });}
 
-  return { getBoard };
+  callFunc(cells);
+
+  function resetClick(cells){ 
+    [...cells].forEach((cell) => {
+    cell.removeEventListener('click', addMark);
+    cell.addEventListener('click', addMark)
+
+  });}
+
+  
+
+
+  return { getBoard, callFunc };
 })();
 
 const gameController = (() => {
@@ -65,8 +98,21 @@ const gameController = (() => {
     });
   };
 
-  const checkBoard = () => {};
-  const resetBoard = () => {};
+  const checkBoard = () => {
+    let getCurrentBoard = gameboard.getBoard();
+    return getCurrentBoard.includes('')
+  };
+  const resetBoard = () => {
+    gameboard.currentPlayer = playerOne.getMark();
+    let allCells = document.querySelectorAll('[data-index]');
+    for (let index = 0; index < allCells.length; index++) {
+      allCells[index].classList.remove('x');
+      allCells[index].classList.remove('o');
+      
+    }
+
+
+  };
 
   return { checkGame, checkBoard, resetBoard };
 })();
