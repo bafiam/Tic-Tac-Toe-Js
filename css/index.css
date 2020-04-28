@@ -1,0 +1,170 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --mark-size: 150px;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.board {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: repeat(3, auto);
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--mark-size);
+  height: var(--mark-size);
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.board .x,
+.board .o {
+  cursor: not-allowed;
+}
+
+.board .x:hover,
+.board .o:hover {
+  background-color: #ff3a3a;
+}
+
+.cell:first-child,
+.cell:nth-of-type(2),
+.cell:nth-of-type(3) {
+  border-top: none;
+}
+
+.cell:last-child,
+.cell:nth-of-type(7),
+.cell:nth-of-type(8) {
+  border-bottom: none;
+}
+
+.cell:nth-of-type(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-of-type(3n + 3) {
+  border-right: none;
+}
+
+.board .x::before,
+.board .x::after {
+  content: '';
+  height: calc(var(--mark-size) * 0.8);
+  width: calc(var(--mark-size) * 0.2);
+  background-color: black;
+  position: absolute;
+}
+
+.board .x::before {
+  transform: rotate(45deg);
+}
+
+.board .x::after {
+  transform: rotate(-45deg);
+}
+
+.board .o::before,
+.board .o::after {
+  content: '';
+  height: calc(var(--mark-size) * 0.8);
+  width: calc(var(--mark-size) * 0.8);
+  border-radius: 50%;
+  background-color: black;
+  position: absolute;
+}
+
+.board .o::after {
+  height: calc(var(--mark-size) * 0.5);
+  width: calc(var(--mark-size) * 0.5);
+  background-color: #fff;
+}
+
+.onGoingMsg {
+  position: absolute;
+  left: 50%;
+  top: calc((100vh - (var(--mark-size) * 3)) / 3);
+  transform: translateX(-50%);
+}
+
+.response,
+.players {
+  position: absolute;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+}
+
+.restart {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  outline: none;
+  background-color: green;
+  z-index: 5;
+}
+
+.restart:hover {
+  color: white;
+  background-color: black;
+}
+
+.players {
+  display: flex;
+}
+
+.players input,
+.players .submit {
+  margin: 15px 0;
+  height: 35px;
+  width: 250px;
+  border: none;
+  border-radius: 6px;
+  padding-left: 5px;
+  outline: none;
+}
+
+.players .submit {
+  background-color: rgb(1, 112, 1);
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+.players .submit:hover {
+  background-color: green;
+}
+
+.message,
+legend {
+  font-size: 34px;
+  font-weight: bold;
+  padding-bottom: 20px;
+  color: white;
+}
+
+.end-game {
+  pointer-events: none;
+}
