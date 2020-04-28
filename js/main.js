@@ -6,7 +6,7 @@ const Player = (name, mark) => {
 };
 
 const gameboard = (() => {
-  
+
 
   const cells = document.querySelectorAll('[data-index]');
   let board = ['', '', '', '', '', '', '', '', ''];
@@ -68,7 +68,7 @@ const gameController = (() => {
     // eslint-disable-next-line no-use-before-define
     if (checkGame(currentPlayer) === true) {
       endGame(`The winner is ${currentPlayer.getName()}!`);
-    // eslint-disable-next-line no-use-before-define
+      // eslint-disable-next-line no-use-before-define
     } else if (boardIsFull()) {
       endGame("Game Over, It's a tie!");
     } else changePlayer();
@@ -92,7 +92,7 @@ const gameController = (() => {
 
   const resetBoard = () => {
     currentPlayer = playerOne;
-    for (let index = 0; index < cells.length; index+= 1) {
+    for (let index = 0; index < cells.length; index += 1) {
       cells[index].classList.remove('x');
       cells[index].classList.remove('o');
     }
