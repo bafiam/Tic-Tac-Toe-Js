@@ -5,94 +5,36 @@ const Player = (name, mark) => {
   return { getName, getMark };
 };
 
-const playerOne = Player('jeff', 'x');
-const playerTwo = Player('stephen', 'o')
-
 const gameboard = (() => {
   'use strict';
 
+  const cells = document.querySelectorAll('[data-index]');
   let board = ['', '', '', '', '', '', '', '', ''];
 
   const getBoard = () => board;
+  const getCells = () => cells;
   const setBoard = () => {
     board = ['', '', '', '', '', '', '', '', ''];
     return board;
-  }
-
-  let boardreply = document.querySelector('.message')
-
-  const cells = document.querySelectorAll('[data-index]');
-
-  
-
-
-  let currentPlayer = playerOne.getMark();
-
-  
-
-  function changePlayer() {
-    if (currentPlayer === 'x') currentPlayer = playerTwo.getMark();
-    else currentPlayer = 'x';
-  }
-
-  function playerName(mark) {
-    if (mark === 'x') {
-      return playerOne.getName();
-      
-    } else {
-      return playerTwo.getName();
-      
-    }
-    
-  }
-
-  const addMark = (e) => {
-    let index = e.target.getAttribute('data-index');
-    e.target.classList.add(currentPlayer);
-    board[index] = currentPlayer;
-    let gameState = gameController.checkGame(currentPlayer);
-    if (gameState === true) {
-      boardreply.innerHTML = `The winner is ${playerName(currentPlayer)}`
-      gameController.resetBoard();
-      setBoard();
-      resetClick(cells);
-    }else{
-      let boardFull = gameController.checkBoard()
-      if (!boardFull) {
-        console.log(`Game end, draw!!`);
-       
-        gameController.resetBoard();
-        setBoard();
-        resetClick(cells);
-      }
-
-    }
-    changePlayer();
   };
-  
-  
-  function callFunc(cells){ 
-    [...cells].forEach((cell) => {
-    cell.addEventListener('click', addMark, { once: true });
-  });}
 
-  callFunc(cells);
-
-  function resetClick(cells){ 
-    [...cells].forEach((cell) => {
-    cell.removeEventListener('click', addMark);
-    cell.addEventListener('click', addMark)
-
-  });}
-
-  
-
-
-  return { getBoard, setBoard, resetClick};
+  return { getBoard, setBoard, getCells };
 })();
 
 const gameController = (() => {
   'use strict';
+
+  let playerOne;
+  let playerTwo;
+
+  const boardreply = document.querySelector('.message');
+  let currentPlayer;
+  const cells = gameboard.getCells();
+  const addPlayerForm = document.querySelector('#user-input');
+  const restartBtn = document.querySelector('#restart');
+  const boardTable = document.querySelector('.board');
+  const response = document.querySelector('.response');
+  const onGoingMsg = document.querySelector('.onGoingMsg');
 
   const winningPosition = [
     [0, 1, 2],
@@ -105,9 +47,36 @@ const gameController = (() => {
     [2, 4, 6],
   ];
 
+  const changePlayer = () => {
+    currentPlayer.getMark() === 'x'
+      ? (currentPlayer = playerTwo)
+      : (currentPlayer = playerOne);
+  };
+
+  const endGame = (message) => {
+    boardreply.innerHTML = message;
+    boardTable.classList.add('end-game');
+    response.style.display = 'flex';
+  };
+
+  const addMark = (e) => {
+    const index = e.target.getAttribute('data-index');
+    e.target.classList.add(currentPlayer.getMark());
+
+    const board = gameboard.getBoard();
+    board[index] = currentPlayer;
+
+    if (checkGame(currentPlayer) === true) {
+      endGame(`The winner is ${currentPlayer.getName()}!`);
+    } else if (boardIsFull()) {
+      endGame("Game Over, It's a tie!");
+    } else changePlayer();
+
+    onGoingMsg.innerHTML = `It's ${currentPlayer.getName()}'s turn!`;
+  };
+
   const checkGame = (currentPlayer) => {
     let currentBoard = gameboard.getBoard();
-
     return winningPosition.some((arr) => {
       return arr.every((item) => {
         return currentBoard[item] === currentPlayer;
@@ -115,29 +84,53 @@ const gameController = (() => {
     });
   };
 
-  const checkBoard = () => {
+  const boardIsFull = () => {
     let getCurrentBoard = gameboard.getBoard();
-    return getCurrentBoard.includes('')
+    return !getCurrentBoard.includes('');
   };
+
   const resetBoard = () => {
-    gameboard.currentPlayer = playerOne.getMark();
-    let allCells = document.querySelectorAll('[data-index]');
-    for (let index = 0; index < allCells.length; index++) {
-      allCells[index].classList.remove('x');
-      allCells[index].classList.remove('o');
-      
+    currentPlayer = playerOne;
+    for (let index = 0; index < cells.length; index++) {
+      cells[index].classList.remove('x');
+      cells[index].classList.remove('o');
     }
-
-
+    gameboard.setBoard();
   };
 
+  const resetClick = () => {
+    [...cells].forEach((cell) => {
+      cell.removeEventListener('click', addMark);
+      cell.addEventListener('click', addMark, { once: true });
+    });
+  };
+
+  restartBtn.addEventListener('click', () => {
+    onGoingMsg.innerHTML = `It's ${playerOne.getName()}'s turn!`;
+    startGame();
+  });
+
+  addPlayerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let player1 = e.target.elements[0].value;
+    let player2 = e.target.elements[1].value;
+
+    playerOne = Player(player1, 'x');
+    playerTwo = Player(player2, 'o');
+
+    onGoingMsg.innerHTML = `It's ${playerOne.getName()}'s turn!`;
+
+    startGame();
+  });
 
   const startGame = () => {
+    addPlayerForm.style.display = 'none';
+    response.style.display = 'none';
+    boardTable.classList.remove('end-game');
+    boardreply.innerHTML = '';
     resetBoard();
-    gameboard.setBoard();
-    gameboard.resetClick();
-
+    resetClick();
   };
 
-  return { checkGame, checkBoard, resetBoard, startGame };
+  return { startGame };
 })();
