@@ -44,7 +44,7 @@ const gameController = (() => {
   ];
 
   const changePlayer = () => {
-    currentPlayer.getMark() === 'x' ? (currentPlayer = playerTwo): (currentPlayer = playerOne);
+    currentPlayer.getMark() === 'x' ? (currentPlayer = playerTwo) : (currentPlayer = playerOne);
   };
 
   const endGame = (message) => {
