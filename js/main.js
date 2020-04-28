@@ -6,8 +6,6 @@ const Player = (name, mark) => {
 };
 
 const gameboard = (() => {
-
-
   const cells = document.querySelectorAll('[data-index]');
   let board = ['', '', '', '', '', '', '', '', ''];
 
@@ -22,7 +20,6 @@ const gameboard = (() => {
 })();
 
 const gameController = (() => {
-
   let playerOne;
   let playerTwo;
 
@@ -47,9 +44,7 @@ const gameController = (() => {
   ];
 
   const changePlayer = () => {
-    currentPlayer.getMark() === 'x'
-      ? (currentPlayer = playerTwo)
-      : (currentPlayer = playerOne);
+    currentPlayer.getMark() === 'x' ? (currentPlayer = playerTwo): (currentPlayer = playerOne);
   };
 
   const endGame = (message) => {
