@@ -6,7 +6,7 @@ const Player = (name, mark) => {
 };
 
 const gameboard = (() => {
-  'use strict';
+  
 
   const cells = document.querySelectorAll('[data-index]');
   let board = ['', '', '', '', '', '', '', '', ''];
@@ -22,7 +22,6 @@ const gameboard = (() => {
 })();
 
 const gameController = (() => {
-  'use strict';
 
   let playerOne;
   let playerTwo;
@@ -66,8 +65,10 @@ const gameController = (() => {
     const board = gameboard.getBoard();
     board[index] = currentPlayer;
 
+    // eslint-disable-next-line no-use-before-define
     if (checkGame(currentPlayer) === true) {
       endGame(`The winner is ${currentPlayer.getName()}!`);
+    // eslint-disable-next-line no-use-before-define
     } else if (boardIsFull()) {
       endGame("Game Over, It's a tie!");
     } else changePlayer();
@@ -76,7 +77,7 @@ const gameController = (() => {
   };
 
   const checkGame = (currentPlayer) => {
-    let currentBoard = gameboard.getBoard();
+    const currentBoard = gameboard.getBoard();
     return winningPosition.some((arr) => {
       return arr.every((item) => {
         return currentBoard[item] === currentPlayer;
@@ -85,13 +86,13 @@ const gameController = (() => {
   };
 
   const boardIsFull = () => {
-    let getCurrentBoard = gameboard.getBoard();
+    const getCurrentBoard = gameboard.getBoard();
     return !getCurrentBoard.includes('');
   };
 
   const resetBoard = () => {
     currentPlayer = playerOne;
-    for (let index = 0; index < cells.length; index++) {
+    for (let index = 0; index < cells.length; index+= 1) {
       cells[index].classList.remove('x');
       cells[index].classList.remove('o');
     }
@@ -107,13 +108,14 @@ const gameController = (() => {
 
   restartBtn.addEventListener('click', () => {
     onGoingMsg.innerHTML = `It's ${playerOne.getName()}'s turn!`;
+    // eslint-disable-next-line no-use-before-define
     startGame();
   });
 
   addPlayerForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    let player1 = e.target.elements[0].value;
-    let player2 = e.target.elements[1].value;
+    const player1 = e.target.elements[0].value;
+    const player2 = e.target.elements[1].value;
 
     playerOne = Player(player1, 'x');
     playerTwo = Player(player2, 'o');
@@ -121,6 +123,7 @@ const gameController = (() => {
     onGoingMsg.innerHTML = `It's ${playerOne.getName()}'s turn!`;
     addPlayerForm.style.display = 'none';
 
+    // eslint-disable-next-line no-use-before-define
     startGame();
   });
 
