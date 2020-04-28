@@ -119,12 +119,12 @@ const gameController = (() => {
     playerTwo = Player(player2, 'o');
 
     onGoingMsg.innerHTML = `It's ${playerOne.getName()}'s turn!`;
+    addPlayerForm.style.display = 'none';
 
     startGame();
   });
 
   const startGame = () => {
-    addPlayerForm.style.display = 'none';
     response.style.display = 'none';
     boardTable.classList.remove('end-game');
     boardreply.innerHTML = '';
@@ -134,3 +134,5 @@ const gameController = (() => {
 
   return { startGame };
 })();
+
+gameController.startGame();
