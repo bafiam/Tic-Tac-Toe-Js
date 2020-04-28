@@ -43,8 +43,14 @@ const gameController = (() => {
     [2, 4, 6],
   ];
 
+  // eslint-disable-next-line no-unused-expressions
   const changePlayer = () => {
-    currentPlayer.getMark() === 'x' ? (currentPlayer = playerTwo) : (currentPlayer = playerOne);
+    if (currentPlayer.getMark() === 'x') {
+      currentPlayer = playerTwo;
+      return currentPlayer;
+    }
+    currentPlayer = playerOne;
+    return currentPlayer;
   };
 
   const endGame = (message) => {
@@ -73,11 +79,7 @@ const gameController = (() => {
 
   const checkGame = (currentPlayer) => {
     const currentBoard = gameboard.getBoard();
-    return winningPosition.some((arr) => {
-      return arr.every((item) => {
-        return currentBoard[item] === currentPlayer;
-      });
-    });
+    return winningPosition.some((arr) => arr.every((item) => currentBoard[item] === currentPlayer));
   };
 
   const boardIsFull = () => {
