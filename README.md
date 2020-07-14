@@ -18,6 +18,16 @@ Two users are expected to provide their name which will be the indentifier.
 - Players play in turns
 - In case of a complete win match, a winner is decayed.
 
+## Screenshots
+
+### Welcome page
+
+![screenshot](tic-home.png)
+
+### Play Scene
+
+![screenshot](tic-play.png)
+
 ### Prerequisites
 
 - Javascript
